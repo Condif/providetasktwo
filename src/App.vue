@@ -2,15 +2,15 @@
   <div class="app">
     <Navbar />
     <main>
-      <router-view :products="products" />
+      <router-view :products="products" :cartList="cartList" addToCart="addToCart"/>
     </main>
     <Cart />
   </div>
 </template>
 
 <script>
-import Navbar from "@/components/navbar/Navbar";
-import Cart from "@/components/cart/Cart";
+import Navbar from "@/components/TheNavbar";
+import Cart from "@/components/Cart";
 import axios from "axios";
 
 const url = "https://ftest.dev3.provideit.se";
@@ -23,11 +23,22 @@ export default {
   data() {
     return {
       products: [],
+      cartList: [],
     };
   },
   components: {
     Navbar,
     Cart,
+  },
+  methods: {
+    addToCart (product) {
+      //add to cartList
+      const newCartList = [...this.cartList]
+      newCartList.push(product)
+      this.cartList = newCartList
+
+      //post to wordpress
+    }
   },
   async created() {
     axios

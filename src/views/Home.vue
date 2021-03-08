@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-    <ProductGrid  :products="products"/>
+    <ProductGrid  :products="products" addToCart="addToCart"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import ProductGrid from "@/components/productgrid/ProductGrid"
+import ProductGrid from "@/components/ProductGrid"
 
 export default {
   name: 'Home',
   components: {
     ProductGrid
   },
-  props: ["products"]
+  props: ["products", "addToCart"]
 }
 </script>
   
