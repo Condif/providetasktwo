@@ -1,16 +1,23 @@
 <template>
   <div class="app">
-    <Navbar />
+    <Navbar @open="isModalActive = true" />
+    <BaseModal v-show="isModalActive" @close="isModalActive = false">
+      <Cart :addToCart="addToCart" :removeFromCart="removeFromCart" :cartList="cartList" :productAmount="productAmount"/>
+    </BaseModal>
     <main>
-      <router-view :products="products" :cartList="cartList" addToCart="addToCart"/>
+      <router-view
+        :products="products"
+        :cartList="cartList"
+        :addToCart="addToCart"
+      />
     </main>
-    <Cart />
   </div>
 </template>
 
 <script>
 import Navbar from "@/components/TheNavbar";
 import Cart from "@/components/Cart";
+import BaseModal from "@/components/BaseModal";
 import axios from "axios";
 
 const url = "https://ftest.dev3.provideit.se";
@@ -24,25 +31,58 @@ export default {
     return {
       products: [],
       cartList: [],
+      isModalActive: false,
+      productAmount: null,
     };
   },
   components: {
     Navbar,
     Cart,
+    BaseModal,
   },
   methods: {
-    addToCart (product) {
+    addToCart(product) {
+      const newCartList = [...this.cartList];
+      
+      if(this.cartList.includes(product)) {
+        const index = newCartList.indexOf(product)
+        console.log(index);
+        const groupedProducts = [...newCartList[index]?.grouped_products]
+        console.log(groupedProducts);
+        groupedProducts.push(product)
+        newCartList[index].grouped_products = groupedProducts;
+        this.cartList === newCartList
+        console.log("added to amount");
+        return
+      }
       //add to cartList
-      const newCartList = [...this.cartList]
-      newCartList.push(product)
-      this.cartList = newCartList
+      newCartList.push(product);
+      this.cartList = newCartList;
 
       //post to wordpress
+    },
+    removeFromCart(product) {
+      //remove from cartList
+      const newCartList = [...this.cartList];
+      const index = newCartList.indexOf(product)
+      const groupedProducts = [...newCartList[index].grouped_products]
+
+      if(product.grouped_products.length === 0) {
+        newCartList.splice(index, 1);
+        this.cartList = newCartList;
+        return
+      }
+      
+      groupedProducts.splice(index, 1);
+      newCartList[index].grouped_products = groupedProducts
+
+      this.cartList = newCartList;
+      console.log(this.cartList);
     }
   },
   async created() {
     axios
-      .get(url + productEndpoint  + keys )
+      .get(url + productEndpoint + keys)
       .then((res) => {
         this.products = res.data;
         console.log(this.products);

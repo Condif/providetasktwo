@@ -8,7 +8,7 @@
         </div>
         <img :src="product.images[0].src" />
         <div class="cardFooter">
-          <BaseButton @click="addToCart(product)" class="baseButton"
+          <BaseButton  @add="addToCart(product)" class="baseButton"
             >Add to cart
           </BaseButton>
         </div>

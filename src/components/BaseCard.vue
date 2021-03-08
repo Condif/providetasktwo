@@ -20,6 +20,7 @@ export default {
         padding: {default: "1rem"},
         borderRadius: {default: "1rem"},
         background: {default: "rgb(247, 247, 245)"},
+        boxShadow: {default: "1px 1px 6px lightgrey"}
     },
     computed: {
         cardContent() {

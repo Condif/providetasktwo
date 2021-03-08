@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <ProductGrid  :products="products" addToCart="addToCart"/>
+    <ProductGrid  :products="products" :addToCart="addToCart"/>
   </div>
 </template>
 

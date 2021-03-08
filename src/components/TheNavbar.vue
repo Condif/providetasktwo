@@ -7,7 +7,7 @@
         <router-link to="/" exact>Home</router-link> |
         <router-link to="/about">About</router-link>
     </div>
-    <div class="cart">
+    <div class="cart" @click="$emit('open')">
       <span class="material-icons">
         shopping_cart
       </span>
@@ -46,5 +46,7 @@ export default {
 
 .cart {
     grid-column: 12/13;
+    padding: 1rem;
+    cursor: pointer;
 }
 </style>
