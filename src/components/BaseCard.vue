@@ -19,8 +19,8 @@ export default {
         justifyContent: {default: "space-between"},
         padding: {default: "1rem"},
         borderRadius: {default: "1rem"},
-        background: {default: "rgb(247, 247, 245)"},
-        boxShadow: {default: "1px 1px 6px lightgrey"}
+        background: {default: "white"},
+        boxShadow: {default: "none"}
     },
     computed: {
         cardContent() {
@@ -31,7 +31,7 @@ export default {
                 flexDirection: this.flexDirection,
                 justifyContent: this.justifyContent,
                 padding: this.padding,
-                boxShadow: this.boxShadow,
+                // boxShadow: this.boxShadow,
                 borderRadius: this.borderRadius,
                 background: this.background,
             }
@@ -40,6 +40,7 @@ export default {
             return {
                 display: this.cardDisplay,
                 gridTemplateColumns: this.gridTemplateColumns,
+                boxShadow: this.boxShadow
             }
         }
     }

@@ -28,10 +28,15 @@ export default {
   grid-column: 1 / 4;
   height: 5rem;
   width: 100%;
+  background: white;
+  align-items: center;
+  opacity: 90%;
+  position: fixed;
   
 }
 .links {
     grid-column: 7/13;
+    grid-row: 1/10;
     margin-top: 1rem;
 }
 
@@ -46,7 +51,7 @@ export default {
 
 .cart {
     grid-column: 12/13;
-    padding: 1rem;
+    grid-row: 4/10;
     cursor: pointer;
 }
 </style>

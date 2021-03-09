@@ -42,7 +42,8 @@ export default {
             position: "fixed",
             display: "flex",
             flexDirection: "column",
-            width: "20rem"
+            width: "20rem",
+            borderRadius: "1rem"
         }
     },
     modalHeader() {

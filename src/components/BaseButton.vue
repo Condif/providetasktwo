@@ -13,6 +13,7 @@ export default {
         borderRadius: {default: "1rem"},
         background: {default: "rgb(109,216,83)"},
         cursor: {default: "pointer"},
+        width: {default: "none"}
     },
     computed: {
         styles() {
@@ -23,6 +24,7 @@ export default {
                 borderRadius: this.borderRadius,
                 background: this.background,
                 cursor: this.cursor,
+
             }
         }
     }

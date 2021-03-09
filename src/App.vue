@@ -100,7 +100,23 @@ export default {
   color: #2c3e50;
   margin: 0;
   box-sizing: border-box;
+  
+  
 }
+overflow: hidden; /* Hide scrollbars */
+span {
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+body {
+  background: rgb(247, 247, 245);
+}
+
+
+
 
 .app {
   display: grid;
@@ -111,5 +127,6 @@ main {
   grid-column: 1 / 3;
   justify-content: center;
   display: flex;
+  margin-top: 8rem;
 }
 </style>

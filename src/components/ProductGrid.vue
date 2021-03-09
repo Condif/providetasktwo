@@ -72,7 +72,19 @@ h1 {
   margin: 1rem 0;
 }
 
-@media screen and (max-width: 890px) {
+@media screen and (max-width: 410px) {
+  .content {
+    grid-template: 1fr / 1fr;
+  }
+  h1 {
+  font-size: 2rem;
+}
+span {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 890px) and (min-width: 411px) {
   .content {
     grid-template: 1fr / 1fr;
   }
