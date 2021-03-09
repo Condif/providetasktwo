@@ -49,7 +49,7 @@
       </div>
     </BaseCard>
     <h1 style="font-size: 1rem; text-align: center; padding: 1rem;">Totalt: {{ totalCost }} kr</h1>
-    <div style="display: flex; justifyContent: center; padding: 1rem;"><BaseButton padding="0.8rem 3rem">Betala</BaseButton></div>
+    <div style="display: flex; justifyContent: center; padding: 1rem;"><BaseButton  @onClick="goToCheckout()" padding="0.8rem 3rem">Betala</BaseButton></div>
     
   </div>
 </template>
@@ -57,9 +57,10 @@
 <script>
 import BaseCard from "@/components/BaseCard";
 import BaseButton from "@/components/BaseButton";
+
 export default {
   name: "Cart",
-  props: ["addToCart", "removeFromCart", "cartList", "productAmount"],
+  props: ["addToCart", "removeFromCart", "cartList", "productAmount", "closeModal"],
   components: {
     BaseCard,
     BaseButton,
@@ -68,15 +69,19 @@ export default {
     totalCost() {
       let totalCost = 0;
       this.cartList.forEach((product) => {
-        console.log(product);
         totalCost =
           totalCost + (product.grouped_products.length + 1) * product.price;
-        console.log(totalCost);
       });
-      console.log(totalCost);
       return totalCost;
     },
   },
+  methods: {
+    goToCheckout() {
+      this.closeModal()
+      this.$router.push("/checkout")
+      
+    } 
+  }
 };
 </script>
 

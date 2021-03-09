@@ -2,13 +2,14 @@
   <div class="app">
     <Navbar @open="isModalActive = true" />
     <BaseModal v-show="isModalActive" @close="isModalActive = false">
-      <Cart :addToCart="addToCart" :removeFromCart="removeFromCart" :cartList="cartList" :productAmount="productAmount"/>
+      <Cart :closeModal="closeModal"  @close="isModalActive = false" :addToCart="addToCart" :removeFromCart="removeFromCart" :cartList="cartList" :productAmount="productAmount"/>
     </BaseModal>
     <main>
       <router-view
         :products="products"
         :cartList="cartList"
         :addToCart="addToCart"
+        
       />
     </main>
   </div>
@@ -41,18 +42,18 @@ export default {
     BaseModal,
   },
   methods: {
+    closeModal () {
+      this.isModalActive = false
+    },
     addToCart(product) {
       const newCartList = [...this.cartList];
       
       if(this.cartList.includes(product)) {
         const index = newCartList.indexOf(product)
-        console.log(index);
         const groupedProducts = [...newCartList[index]?.grouped_products]
-        console.log(groupedProducts);
         groupedProducts.push(product)
         newCartList[index].grouped_products = groupedProducts;
         this.cartList === newCartList
-        console.log("added to amount");
         return
       }
       //add to cartList
@@ -77,7 +78,6 @@ export default {
       newCartList[index].grouped_products = groupedProducts
 
       this.cartList = newCartList;
-      console.log(this.cartList);
     }
   },
   async created() {
@@ -103,7 +103,6 @@ export default {
   
   
 }
-overflow: hidden; /* Hide scrollbars */
 span {
     user-select: none; /* standard syntax */
     -webkit-user-select: none; /* webkit (safari, chrome) browsers */
@@ -112,7 +111,7 @@ span {
     -ms-user-select: none; /* IE10+ */
 }
 body {
-  background: rgb(247, 247, 245);
+  background: rgb(243, 243, 243);
 }
 
 

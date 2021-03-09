@@ -31,7 +31,8 @@ export default {
         justifyContent: "flex-end",
         top: "0",
         width: "100%",
-        position: "fixed"
+        position: "fixed",
+        zIndex: "3"
       };
     },
     modalContent () {

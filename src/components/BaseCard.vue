@@ -19,8 +19,8 @@ export default {
         justifyContent: {default: "space-between"},
         padding: {default: "1rem"},
         borderRadius: {default: "1rem"},
-        background: {default: "white"},
-        boxShadow: {default: "none"}
+        background: {default: "rgb(252, 252, 252)"},
+        boxShadow: {default: "none"},
     },
     computed: {
         cardContent() {
