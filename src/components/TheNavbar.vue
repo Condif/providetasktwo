@@ -4,7 +4,7 @@
         <router-link  to="/" exact>Home</router-link> |
         <router-link  to="/about">About</router-link>
     </div>
-    <div v-if="this.$route.name !== 'Checkout'" class="cart" @click="$emit('open')" >
+    <div v-if="this.$route.name !== 'Checkout' && this.$route.name !== 'Receipt'" class="cart" @click="$emit('open')" >
       <span class="material-icons" style="color:green;">
         shopping_cart
       </span>

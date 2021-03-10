@@ -84,11 +84,10 @@
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import axios from "axios";
-
 const url = "https://ftest.dev3.provideit.se";
-const productEndpoint = "/wp-json/wc/v3/orders?";
-const keys =
-  "consumer_key=ck_9b6f2b633c777a37bccb7553cf8b1d47c7e3447c&consumer_secret=cs_55cfbde055597f2eb86077159500e65f1423ac7e";
+const productEndpoint = "/wp-json/wc/v3/orders";
+// const keys =
+  // "consumer_key=ck_9b6f2b633c777a37bccb7553cf8b1d47c7e3447c&consumer_secret=cs_55cfbde055597f2eb86077159500e65f1423ac7e";
 export default {
   mixins: [validationMixin],
   validations: {
@@ -107,6 +106,7 @@ export default {
   },
   props: {
     placeOrder: { type: Function },
+    cartList: { type: Array },
   },
   data() {
     return {
@@ -114,40 +114,46 @@ export default {
       lastName: "",
       email: "",
       submitStatus: null,
-      order: {
-        billing: {},
-        line_items: [],
-      },
     };
-  },
-  components: {
-    // BaseButton,
   },
   methods: {
     submit() {
-      let newOrder = { ...this.order };
-      newOrder.billing = {
+       let newOrder = new FormData;
+      newOrder = {
+        billing: {},
+        line_items: [],
+      };
+      newOrder["billing"] = {
         first_name: this.firstName,
         last_name: this.lastName,
         email: this.email,
       };
-      console.log(this.cartList);
-      newOrder.line_items = this.cartList
-      console.log("submit!");
+      this.cartList.forEach((product) => {
+        newOrder.line_items.push({["product_id"]: product.id, ["quantity"]:  (product.grouped_products.length + 1)});
+      });
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
       } else {
-        // do your submit logic here
-        axios
-          .post(url + productEndpoint + keys, newOrder)
-          .then((res) => {
-            console.log(res);
-          })
+        axios({
+          method: "post",
+          auth: {
+            username: "ck_9b6f2b633c777a37bccb7553cf8b1d47c7e3447c",
+            password: "cs_55cfbde055597f2eb86077159500e65f1423ac7e"
+          },
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          url: url + productEndpoint,
+          data: JSON.stringify(newOrder),
+        })
           .catch((err) => console.log(err));
         this.submitStatus = "PENDING";
         setTimeout(() => {
           this.submitStatus = "OK";
+          this.$emit("newOrder", newOrder);
+          this.$router.push("/receipt")
         }, 500);
       }
     },

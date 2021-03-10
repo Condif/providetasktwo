@@ -9,6 +9,8 @@
         :products="products"
         :cartList="cartList"
         :addToCart="addToCart"
+        @newOrder="createReceipt"
+        :receipt="receipt"
         
       />
     </main>
@@ -34,6 +36,7 @@ export default {
       cartList: [],
       isModalActive: false,
       productAmount: null,
+      receipt: {},
     };
   },
   components: {
@@ -42,6 +45,9 @@ export default {
     BaseModal,
   },
   methods: {
+    createReceipt(value) {
+      this.receipt = value
+    },
     closeModal () {
       this.isModalActive = false
     },
@@ -85,7 +91,6 @@ export default {
       .get(url + productEndpoint + keys)
       .then((res) => {
         this.products = res.data;
-        console.log(this.products);
       })
       .catch((err) => console.log(err));
   },
@@ -127,5 +132,9 @@ main {
   justify-content: center;
   display: flex;
   margin-top: 8rem;
+}
+
+li {
+  list-style-type: none;
 }
 </style>

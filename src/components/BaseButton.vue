@@ -38,4 +38,8 @@ export default {
     button:hover {
         opacity: 100%
     }
+
+    button:focus {
+        outline: none;
+    }
 </style>

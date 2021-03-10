@@ -33,7 +33,7 @@
           </div>
         </div>
       </BaseCard>
-      <BaseForm :placeOrder="placeOrder"></BaseForm>
+      <BaseForm  v-on="$listeners" :cartList="cartList"></BaseForm>
     </BaseCard>
   </div>
 </template>
@@ -47,11 +47,6 @@ export default {
   components: {
     BaseCard,
     BaseForm,
-  },
-  methods: {
-    placeOrder() {
-      console.log("order placed");
-    },
   },
 };
 </script>
