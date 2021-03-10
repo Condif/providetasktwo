@@ -80,7 +80,7 @@ export default {
         return
       }
       
-      groupedProducts.splice(index, 1);
+      groupedProducts.shift(1);
       newCartList[index].grouped_products = groupedProducts
 
       this.cartList = newCartList;
