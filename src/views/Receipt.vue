@@ -16,7 +16,8 @@
           </div>
           <div class="rightContainer">
             <h4 class="margin">Pris: {{ product.price }}kr</h4>
-            <h3>x{{ product.grouped_products.length + 1 }}</h3>
+            <h3 class="margin">x{{ product.grouped_products.length + 1 }}</h3>
+            <h3 class="margin">{{ (product.grouped_products.length + 1)*product.price }}kr</h3>
           </div>
         </li>
       </div>
@@ -27,6 +28,9 @@
         </div>
         <div class="email">
           <h4 class="margin">Email: {{ receipt.billing.email }}</h4>
+        </div>
+        <div class="email">
+          <h3 class="margin">Totalt: {{ totalCost }} kr</h3>
         </div>
         <div class="orderNum">
           <h3 class="margin">Order: xax2321A23dsA2</h3>
@@ -42,6 +46,16 @@ export default {
   props: ["receipt", "cartList"],
   components: {
     BaseCard,
+  },
+  computed: {
+    totalCost() {
+      let totalCost = 0;
+      this.cartList.forEach((product) => {
+        totalCost =
+          totalCost + (product.grouped_products.length + 1) * product.price;
+      });
+      return totalCost;
+    },
   },
 };
 </script>
@@ -63,7 +77,7 @@ export default {
 
 .productInfoItem {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 .leftContainer,
