@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Navbar @open="isModalActive = true" />
+    <Navbar @open="isModalActive = true" :loginInfo="loginInfo"/>
     <BaseModal v-show="isModalActive" @close="isModalActive = false">
       <Cart :closeModal="closeModal"  @close="isModalActive = false" :addToCart="addToCart" :removeFromCart="removeFromCart" :cartList="cartList" :productAmount="productAmount"/>
     </BaseModal>
@@ -9,8 +9,11 @@
         :products="products"
         :cartList="cartList"
         :addToCart="addToCart"
-        @newOrder="createReceipt"
+        @newOrder="(value) => receipt = value"
         :receipt="receipt"
+        @login="(data) => {loginInfo = data.loginInfo, userInfo = data.userInfo }"
+        :loginInfo="loginInfo"
+        :userInfo="userInfo"
         
       />
     </main>
@@ -37,6 +40,8 @@ export default {
       isModalActive: false,
       productAmount: null,
       receipt: {},
+      loginInfo: {},
+      userInfo: {}
     };
   },
   components: {
@@ -45,9 +50,9 @@ export default {
     BaseModal,
   },
   methods: {
-    createReceipt(value) {
-      this.receipt = value
-    },
+    // createReceipt(value) {
+    //   this.receipt = value
+    // },
     closeModal () {
       this.isModalActive = false
     },
@@ -62,14 +67,10 @@ export default {
         this.cartList === newCartList
         return
       }
-      //add to cartList
       newCartList.push(product);
       this.cartList = newCartList;
-
-      //post to wordpress
     },
     removeFromCart(product) {
-      //remove from cartList
       const newCartList = [...this.cartList];
       const index = newCartList.indexOf(product)
       const groupedProducts = [...newCartList[index].grouped_products]

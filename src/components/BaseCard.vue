@@ -31,7 +31,6 @@ export default {
                 flexDirection: this.flexDirection,
                 justifyContent: this.justifyContent,
                 padding: this.padding,
-                // boxShadow: this.boxShadow,
                 borderRadius: this.borderRadius,
                 background: this.background,
             }

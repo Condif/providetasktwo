@@ -33,7 +33,7 @@
           <h3 class="margin">Totalt: {{ totalCost }} kr</h3>
         </div>
         <div class="orderNum">
-          <h3 class="margin">Order: xax2321A23dsA2</h3>
+          <h3 class="margin">Order: {{receipt.order_key}}</h3>
         </div>
       </div>
     </BaseCard>
@@ -96,13 +96,13 @@ export default {
     text-align: center;
     margin-top: 3rem;
 }
-@media screen and (max-width: 410px) {
+@media screen and (max-width: 510px) {
   .baseCard {
     width: 20rem;
   }
 }
 
-@media screen and (min-width: 411px) and (max-width: 890px) {
+@media screen and (min-width: 510px) and (max-width: 890px) {
   .baseCard {
     width: 30rem;
   }

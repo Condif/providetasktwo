@@ -80,14 +80,11 @@
 }
 </style>
 <script>
-// import BaseButton from "@/components/BaseButton";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import axios from "axios";
 const url = "https://ftest.dev3.provideit.se";
 const productEndpoint = "/wp-json/wc/v3/orders";
-// const keys =
-  // "consumer_key=ck_9b6f2b633c777a37bccb7553cf8b1d47c7e3447c&consumer_secret=cs_55cfbde055597f2eb86077159500e65f1423ac7e";
 export default {
   mixins: [validationMixin],
   validations: {
@@ -147,13 +144,16 @@ export default {
           },
           url: url + productEndpoint,
           data: JSON.stringify(newOrder),
+        }).then((res) => {
+           this.$emit("newOrder", res.data);
+           this.$router.push("/receipt")
         })
           .catch((err) => console.log(err));
         this.submitStatus = "PENDING";
         setTimeout(() => {
           this.submitStatus = "OK";
-          this.$emit("newOrder", newOrder);
-          this.$router.push("/receipt")
+         
+          
         }, 500);
       }
     },

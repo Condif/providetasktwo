@@ -27,11 +27,6 @@ export default {
     BaseButton,
     BaseCard,
   },
-
-  // data() {
-  //   return {
-  //   };
-  // },
 };
 </script>
 

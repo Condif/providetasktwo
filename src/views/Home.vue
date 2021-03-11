@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import ProductGrid from "@/components/ProductGrid"
 
 export default {
