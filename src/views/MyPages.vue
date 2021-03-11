@@ -1,36 +1,164 @@
 <template>
   <div class="myPages">
     <h1 class="header">Mina sidor</h1>
-    <BaseCard class="baseCard">
-      <div class="personalInfo">
-        <div class="fullName">
-          <h4 class="margin">Förnamn:{{userInfo.firstName}} </h4>
+    <BaseCard class="baseCard" v-if="loginInfo && loginInfo.user && loginInfo.user.ID">
+      <form style="width: 20rem">
+        <div class="fulldisplay_name">
+          <div class="form-group"></div>
+
+          <h4 class="margin">Namn:{{ loginInfo.user.data.display_name }}</h4>
+          <span
+            @click="
+              enableEditing(loginInfo.user.data.display_name, 'display_name')
+            "
+            class="material-icons"
+          >
+            mode
+          </span>
         </div>
-        <div class="fullName">
-          <h4 class="margin">Efternamn:</h4>
+
+        <div v-if="display_name">
+          <input v-model="tempValuedisplay_name" class="input" />
+          <BaseButton
+            padding="0.4rem"
+            background="pink"
+            style="margin: 0.3rem;"
+            @onClick="disableEditing('display_name')"
+            >Avbryt</BaseButton
+          >
+          <BaseButton
+            padding="0.4rem"
+            style="margin: 0.3rem;"
+            @onClick="saveEdit('display_name')"
+            >Spara</BaseButton
+          >
+          <div class="error" v-if="!$v.tempValuedisplay_name.required">
+            Obligatoriskt fält
+          </div>
+          <div class="error" v-if="!$v.tempValuedisplay_name.minLength">
+            Förnamnet måste innehålla minst
+            {{ $v.tempValuedisplay_name.$params.minLength.min }} bokstäver.
+          </div>
         </div>
         <div class="email">
-          <h4 class="margin">Email:</h4>
+          <h4 class="margin">Email: {{ loginInfo.user.data.user_email }}</h4>
+          <span
+            class="material-icons"
+            @click="enableEditing(loginInfo.user.data.user_email, 'Email')"
+            >mode</span
+          >
         </div>
-        <div class="id">
-          <h4 class="margin">Id: {{loginInfo.id}} </h4>
+        <div v-if="Email">
+          <div
+            class="form-group"
+            :class="{ 'form-group-error': $v.tempValueEmail.$error }"
+          >
+            <input v-model="tempValueEmail" class="input" />
+            <BaseButton
+              padding="0.4rem"
+              background="pink"
+              style="margin: 0.3rem;"
+              @onClick="disableEditing('Email')"
+              >Avbryt</BaseButton
+            >
+            <BaseButton
+              padding="0.4rem"
+              style="margin: 0.3rem;"
+              @onClick="saveEdit('Email')"
+              >Spara</BaseButton
+            >
+            <div class="error" v-if="!$v.tempValueEmail.email">
+              Detta måste vara en email
+            </div>
+            <div class="error" v-if="!$v.tempValueEmail.required">
+              Obligatoriskt fält
+            </div>
+            <div class="error" v-if="!$v.tempValueEmail.minLength">
+              Emailen måste innehålla minst
+              {{ $v.tempValueEmail.$params.minLength.min }} bokstäver.
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
     </BaseCard>
   </div>
 </template>
 
 <script>
 import BaseCard from "@/components/BaseCard";
+import BaseButton from "@/components/BaseButton";
+import { validationMixin } from "vuelidate";
+import { required, minLength, email } from "vuelidate/lib/validators";
+import axios from "axios";
+const url = "https://ftest.dev3.provideit.se/";
+const userEndpoint = "wp-json/wp/v2/users/";
 export default {
   components: {
     BaseCard,
+    BaseButton,
   },
-  props: ["loginInfo", "userInfo"]
+  mixins: [validationMixin],
+  validations: {
+    tempValuedisplay_name: {
+      required,
+      minLength: minLength(4),
+    },
+    tempValueEmail: {
+      required,
+      email,
+      minLength: minLength(4),
+    },
+  },
+  data() {
+    return {
+      tempValuedisplay_name: null,
+      tempValueEmail: null,
+      display_name: false,
+      Email: false,
+      // submitStatus: null,
+    };
+  },
+  methods: {
+    enableEditing: function(value, anchor) {
+      this["tempValue" + anchor] = value;
+      this[anchor] = true;
+    },
+    disableEditing: function(anchor) {
+      this["tempValue" + anchor] = null;
+      this[anchor] = false;
+    },
+    saveEdit: function(anchor) {
+      let params = new FormData();
+      params.append(anchor, this["tempValue" + anchor]);
+      axios({
+        method: "post",
+        url: url + userEndpoint + this.loginInfo.user.ID,
+        data: params,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          'X-WP-Nonce': this.loginInfo.nonce
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          this["tempValue" + anchor];
+          this.disableEditing();
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+  props: ["loginInfo", "userInfo"],
 };
 </script>
 
 <style scoped>
+input {
+  padding: 0.2rem;
+  border-radius: 0.3rem;
+  margin-right: 0.3rem;
+}
+
 .baseCard {
   width: 50rem;
 }
@@ -38,11 +166,17 @@ export default {
 .margin {
   margin: 1rem;
 }
-.fullName {
+.fulldisplay_name,
+.email {
   display: flex;
+  place-items: center;
 }
 .header {
-    text-align: center;
+  text-align: center;
+}
+.material-icons {
+  cursor: pointer;
+  color: green;
 }
 @media screen and (max-width: 510px) {
   .baseCard {

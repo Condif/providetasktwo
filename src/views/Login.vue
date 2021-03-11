@@ -3,40 +3,15 @@
       <h1 style="textAlign: center;">Logga in</h1>
     <BaseCard class="container">
       <form @submit.prevent="submit" style="width: 20rem">
-        <div class="form-group">
-          <label class="form__label">Förnamn</label>
-          <input class="form__input" v-model.trim="$v.firstName.$model" />
-        </div>
-        
-        <div class="error" v-if="!$v.firstName.required">
-          Obligatoriskt fält
-        </div>
-        <div class="error" v-if="!$v.firstName.minLength">
-          Förnamnet måste innehålla minst
-          {{ $v.firstName.$params.minLength.min }} bokstäver.
-        </div>
-        <div
-          class="form-group"
-          :class="{ 'form-group-error': $v.firstName.$error }"
-        >
-          <label class="form__label">Efternamn</label>
-          <input class="form__input" v-model.trim="$v.lastName.$model" />
-        </div>
-        <div class="error" v-if="!$v.lastName.required">Obligatoriskt fält</div>
-        <div class="error" v-if="!$v.lastName.minLength">
-          Efternamnet måste innehålla minst
-          {{ $v.lastName.$params.minLength.min }} bokstäver.
-        </div>
-        
         <div
           class="form-group"
           :class="{ 'form-group-error': $v.email.$error }"
         >
-        <h4 style="paddingBottom: 0.3rem;">Användarnamn</h4>
           <label class="form__label">Email</label>
           <input class="form__input" v-model.trim="$v.email.$model" />
         </div>
-        <div class="error" v-if="!$v.email.required">Obligatoriskt fält, email blir ditt användarnamn</div>
+        <div class="error" v-if="!$v.email.email">Detta måste vara en email</div>
+        <div class="error" v-if="!$v.email.required">Obligatoriskt fält, angiven email är ditt användarnamn</div>
         <div class="error" v-if="!$v.email.minLength">
           Emailen måste innehålla minst
           {{ $v.email.$params.minLength.min }} bokstäver.
@@ -45,8 +20,8 @@
           class="form-group"
           :class="{ 'form-group-error': $v.password.$error }"
         >
-          <label class="form__label">Password</label>
-          <input class="form__input" v-model.trim="$v.password.$model" />
+          <label class="form__label" >Lösenord</label>
+          <input class="form__input" type="password" v-model.trim="$v.password.$model" />
         </div>
         <div class="error" v-if="!$v.password.required">Obligatoriskt fält</div>
         <div class="error" v-if="!$v.password.minLength">
@@ -76,7 +51,7 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, email } from "vuelidate/lib/validators";
 import axios from "axios";
 import BaseCard from "@/components/BaseCard";
 const url = "https://ftest.dev3.provideit.se";
@@ -85,24 +60,25 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      firstName: "",
-      lastName: "",
+    //   firstName: "",
+    //   lastName: "",
       email: "",
       password: "",
       submitStatus: null,
     };
   },
   validations: {
-    firstName: {
-      required,
-      minLength: minLength(4),
-    },
-    lastName: {
-      required,
-      minLength: minLength(4),
-    },
+    // firstName: {
+    //   required,
+    //   minLength: minLength(4),
+    // },
+    // lastName: {
+    //   required,  
+    //   minLength: minLength(4),
+    // },
     email: {
       required,
+      email,
       minLength: minLength(4),
     },
     password: {
@@ -115,37 +91,22 @@ export default {
   },
   methods: {
     submit() {
-      let params = new FormData();
-      console.log(params);
-      params = { password: this.password, username: this.email };
-      const userInfo = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        password: this.password,
-        email: this.email,
-      };
-        console.log(params);
+
+    let params = new FormData();
+      params.append('password', this.password);
+      params.append('username', this.email);
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
       } else {
         axios({
           method: "post",
-        //   auth: {
-        //     username: "ck_9b6f2b633c777a37bccb7553cf8b1d47c7e3447c",
-        //     password: "cs_55cfbde055597f2eb86077159500e65f1423ac7e"
-        //   },
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //     "Accept": "application/json",
-            
-        //   },
           url: url + loginEndpoint,
-          data: JSON.stringify(params),
+          data: params,
         })
           .then((res) => {
             console.log(res);
-            this.$emit("login", {loginInfo: res.data, userInfo: userInfo});
+            this.$emit("login", res.data);
             this.$router.push("/");
           })
           .catch((err) => console.log(err));

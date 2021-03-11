@@ -49,7 +49,9 @@
       </div>
     </BaseCard>
     <h1 style="font-size: 1rem; text-align: center; padding: 1rem;">Totalt: {{ totalCost }} kr</h1>
-    <div style="display: flex; justifyContent: center; padding: 1rem;"><BaseButton  @onClick="goToCheckout()" padding="0.8rem 3rem">Betala</BaseButton></div>
+    
+    <div v-if="cartList.length !== 0" style="display: flex; justifyContent: center; padding: 1rem;"><BaseButton  @onClick="goToCheckout()" padding="0.8rem 3rem">Betala</BaseButton></div>
+    <div v-if="cartList.length === 0" style="display: flex; justifyContent: center; padding: 1rem;"><BaseButton  @onClick="()=> { this.closeModal()} " padding="0.8rem 3rem">Fortsätt shoppa</BaseButton></div>
     
   </div>
 </template>

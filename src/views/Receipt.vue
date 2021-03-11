@@ -7,7 +7,7 @@
       <div class="productContainer">
         <li
           class="productInfoItem"
-          v-for="(product, index) in cartList"
+          v-for="(product, index) in oldCartList"
           :key="index"
         >
           <div class="leftContainer">
@@ -43,14 +43,15 @@
 <script>
 import BaseCard from "@/components/BaseCard";
 export default {
-  props: ["receipt", "cartList"],
+  props: ["receipt", "oldCartList"],
   components: {
     BaseCard,
   },
   computed: {
     totalCost() {
+      console.log(this.receipt);
       let totalCost = 0;
-      this.cartList.forEach((product) => {
+      this.oldCartList.forEach((product) => {
         totalCost =
           totalCost + (product.grouped_products.length + 1) * product.price;
       });

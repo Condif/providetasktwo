@@ -81,7 +81,7 @@
 </style>
 <script>
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, email } from "vuelidate/lib/validators";
 import axios from "axios";
 const url = "https://ftest.dev3.provideit.se";
 const productEndpoint = "/wp-json/wc/v3/orders";
@@ -98,6 +98,7 @@ export default {
     },
     email: {
       required,
+      email,
       minLength: minLength(4),
     },
   },

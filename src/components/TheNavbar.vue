@@ -5,15 +5,16 @@
         <router-link  to="/about">Om</router-link> |
         <router-link  to="/mypages">Mina sidor</router-link>
     </div>
-    <div v-if="this.$route.name !== 'Checkout' && this.$route.name !== 'Receipt' && this.$route.name !== 'Login'" class="cart end" @click="$emit('open')" >
+    <!-- v-if="this.$route.name !== 'Checkout' && this.$route.name !== 'Receipt' && this.$route.name !== 'Login'" -->
+    <div  class="cart end" @click="$emit('open')" >
       <span class="material-icons" style="color:green;">
         shopping_cart
       </span>
     </div>
-    <div class="login end"  v-if="!loginInfo.id">
-      <router-link to="login">Logga in</router-link>
+    <div class="login end"  >
+      <router-link v-if="loginInfo && !loginInfo.user" to="login">Logga in</router-link>
     </div>
-    <div class="login end" v-if="this.$route.name !== 'Login' && loginInfo.id">
+    <div class="login end" v-if="this.$route.name !== 'Login' && loginInfo && loginInfo.user && loginInfo.user.ID">
       <router-link to="login">Logga ut</router-link>
     </div>
   </div>
@@ -40,7 +41,7 @@ export default {
   
 }
 .links {
-    grid-column: 8/12;
+    grid-column: 7/13;
     grid-row: 2/10;
     margin-top: 1rem;
 }
@@ -61,21 +62,21 @@ export default {
     
 }
 .login {
-  grid-column: 12/14;
+  grid-column: 12/13;
 }
 .cart {
-  grid-column: 11/14;
+  grid-column: 11/13;
 }
 
 @media screen and (max-width: 570px) {
   .cart {
-    grid-column: 2/14;
+    grid-column: 2/13;
   }
   .login {
-    grid-column: 13/14;
+    grid-column: 13/13;
   }
   .links {
-    grid-column: 6/14;
+    grid-column: 7/13;
   }
 }
 </style>

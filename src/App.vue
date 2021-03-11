@@ -8,13 +8,12 @@
       <router-view
         :products="products"
         :cartList="cartList"
+        :oldCartList="oldCartList"
         :addToCart="addToCart"
-        @newOrder="(value) => receipt = value"
+        @newOrder="(value) =>{ receipt = value, oldCartList = [...this.cartList], cartList = []}"
         :receipt="receipt"
-        @login="(data) => {loginInfo = data.loginInfo, userInfo = data.userInfo }"
+        @login="(data) => loginInfo = data"
         :loginInfo="loginInfo"
-        :userInfo="userInfo"
-        
       />
     </main>
   </div>
@@ -41,8 +40,14 @@ export default {
       productAmount: null,
       receipt: {},
       loginInfo: {},
-      userInfo: {}
+      userInfo: {},
+      oldCartList: [],
     };
+  },
+  watch: {
+    loginInfo () {
+      console.log(this.loginInfo.user.ID);
+    }
   },
   components: {
     Navbar,
@@ -50,9 +55,6 @@ export default {
     BaseModal,
   },
   methods: {
-    // createReceipt(value) {
-    //   this.receipt = value
-    // },
     closeModal () {
       this.isModalActive = false
     },
