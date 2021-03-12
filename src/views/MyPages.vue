@@ -1,7 +1,10 @@
 <template>
   <div class="myPages">
     <h1 class="header">Mina sidor</h1>
-    <BaseCard class="baseCard" v-if="loginInfo && loginInfo.user && loginInfo.user.ID">
+    <BaseCard
+      class="baseCard"
+      v-if="loginInfo && loginInfo.user && loginInfo.user.ID"
+    >
       <form style="width: 20rem">
         <div class="fulldisplay_name">
           <div class="form-group"></div>
@@ -89,9 +92,9 @@ import BaseCard from "@/components/BaseCard";
 import BaseButton from "@/components/BaseButton";
 import { validationMixin } from "vuelidate";
 import { required, minLength, email } from "vuelidate/lib/validators";
-import axios from "axios";
-const url = "https://ftest.dev3.provideit.se/";
-const userEndpoint = "wp-json/wp/v2/users/";
+// import axios from "axios";
+// const url = "https://ftest.dev3.provideit.se/";
+// const userEndpoint = "wp-json/wp/v2/users/";
 export default {
   components: {
     BaseCard,
@@ -118,6 +121,7 @@ export default {
       // submitStatus: null,
     };
   },
+  props: ["loginInfo"],
   methods: {
     enableEditing: function(value, anchor) {
       this["tempValue" + anchor] = value;
@@ -130,25 +134,31 @@ export default {
     saveEdit: function(anchor) {
       let params = new FormData();
       params.append(anchor, this["tempValue" + anchor]);
-      axios({
-        method: "post",
-        url: url + userEndpoint + this.loginInfo.user.ID,
-        data: params,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          'X-WP-Nonce': this.loginInfo.nonce
-        },
-      })
-        .then((res) => {
-          console.log(res);
-          this["tempValue" + anchor];
-          this.disableEditing();
-        })
-        .catch((err) => console.log(err));
+      console.log(this.loginInfo.nonce);
+      console.log(this["tempValue" + anchor]);
+      console.log(anchor);
+      let newNonce = this.loginInfo.nonce.replace(/^\s+/g, "");
+      console.log(newNonce);
+    
+      // axios({
+      //   method: "post",
+      //   headers: {
+      //     "X-WP-Nonce": newNonce,
+      //     "Content-Type": "application/json",
+      //     Accept: "application/json",
+      //   },
+      //   url: url + userEndpoint + this.loginInfo.user.ID,
+      //   data: params,
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     console.log(this["tempValue" + anchor]);
+      //     this["tempValue" + anchor];
+      //     this.disableEditing();
+      //   })
+      //   .catch((err) => console.log(err));
     },
   },
-  props: ["loginInfo", "userInfo"],
 };
 </script>
 

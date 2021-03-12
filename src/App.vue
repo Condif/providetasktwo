@@ -1,8 +1,15 @@
 <template>
   <div class="app">
-    <Navbar @open="isModalActive = true" :loginInfo="loginInfo"/>
+    <Navbar @open="isModalActive = true" :loginInfo="loginInfo" />
     <BaseModal v-show="isModalActive" @close="isModalActive = false">
-      <Cart :closeModal="closeModal"  @close="isModalActive = false" :addToCart="addToCart" :removeFromCart="removeFromCart" :cartList="cartList" :productAmount="productAmount"/>
+      <Cart
+        :closeModal="closeModal"
+        @close="isModalActive = false"
+        :addToCart="addToCart"
+        :removeFromCart="removeFromCart"
+        :cartList="cartList"
+        :productAmount="productAmount"
+      />
     </BaseModal>
     <main>
       <router-view
@@ -10,9 +17,15 @@
         :cartList="cartList"
         :oldCartList="oldCartList"
         :addToCart="addToCart"
-        @newOrder="(value) =>{ receipt = value, oldCartList = [...this.cartList], cartList = []}"
+        @newOrder="
+          (value) => {
+            (receipt = value),
+              (oldCartList = [...this.cartList]),
+              (cartList = []);
+          }
+        "
         :receipt="receipt"
-        @login="(data) => loginInfo = data"
+        @login="(data) => (loginInfo = data)"
         :loginInfo="loginInfo"
       />
     </main>
@@ -45,9 +58,9 @@ export default {
     };
   },
   watch: {
-    loginInfo () {
+    loginInfo() {
       console.log(this.loginInfo.user.ID);
-    }
+    },
   },
   components: {
     Navbar,
@@ -55,39 +68,39 @@ export default {
     BaseModal,
   },
   methods: {
-    closeModal () {
-      this.isModalActive = false
+    closeModal() {
+      this.isModalActive = false;
     },
     addToCart(product) {
       const newCartList = [...this.cartList];
-      
-      if(this.cartList.includes(product)) {
-        const index = newCartList.indexOf(product)
-        const groupedProducts = [...newCartList[index]?.grouped_products]
-        groupedProducts.push(product)
+
+      if (this.cartList.includes(product)) {
+        const index = newCartList.indexOf(product);
+        const groupedProducts = [...newCartList[index]?.grouped_products];
+        groupedProducts.push(product);
         newCartList[index].grouped_products = groupedProducts;
-        this.cartList === newCartList
-        return
+        this.cartList === newCartList;
+        return;
       }
       newCartList.push(product);
       this.cartList = newCartList;
     },
     removeFromCart(product) {
       const newCartList = [...this.cartList];
-      const index = newCartList.indexOf(product)
-      const groupedProducts = [...newCartList[index].grouped_products]
+      const index = newCartList.indexOf(product);
+      const groupedProducts = [...newCartList[index].grouped_products];
 
-      if(product.grouped_products.length === 0) {
+      if (product.grouped_products.length === 0) {
         newCartList.splice(index, 1);
         this.cartList = newCartList;
-        return
+        return;
       }
-      
+
       groupedProducts.shift(1);
-      newCartList[index].grouped_products = groupedProducts
+      newCartList[index].grouped_products = groupedProducts;
 
       this.cartList = newCartList;
-    }
+    },
   },
   async created() {
     axios
@@ -108,22 +121,17 @@ export default {
   color: #2c3e50;
   margin: 0;
   box-sizing: border-box;
-  
-  
 }
 span {
-    user-select: none; /* standard syntax */
-    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-    -moz-user-select: none; /* mozilla browsers */
-    -khtml-user-select: none; /* webkit (konqueror) browsers */
-    -ms-user-select: none; /* IE10+ */
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
 }
 body {
   background: rgb(243, 243, 243);
 }
-
-
-
 
 .app {
   display: grid;
